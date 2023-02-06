@@ -22,7 +22,12 @@ $ git clone <https://github.com/diegos1964/auvo-processador.git>
 # Acesse a pasta do projeto raiz do projeto e digite o comando
 $ dotnet run
 
-# Vai abrir o console e você deverá informar o caminho da pasta com os arquivos csv a serem processados.
+# Preencha a pasta com os arquivos de teste e aperte enter
+
+# Preencha a pasta onde quer que o Json seja gerado será gerado um arquivo RelatorioFinal.json
+
+```
+## Exemplo de execução:
 ![image](https://user-images.githubusercontent.com/39017463/216878471-c41cb15b-fa9c-4e80-bc68-2732832a4297.png)
 
 
