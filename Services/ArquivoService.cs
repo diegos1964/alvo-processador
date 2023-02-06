@@ -23,19 +23,28 @@ namespace Processador.Services
         Console.WriteLine("Olá, Seja bem-vindo!");
 
         Console.WriteLine("Digite a pasta raiz dos arquivos: ");
-        string? pastarParaProcessar = Console.ReadLine();
+        string? pastaParaProcessar = Console.ReadLine();
 
-        if (String.IsNullOrEmpty(pastarParaProcessar))
+        if (String.IsNullOrEmpty(pastaParaProcessar))
         {
           Console.WriteLine("O Caminho da pasta raiz deve ser informado para processar");
 
         }
 
-        if (!String.IsNullOrEmpty(pastarParaProcessar))
+        Console.WriteLine("Digite a pasta raiz do arquivo resultado Json: ");
+        string? pastaParaGerarJson = Console.ReadLine();
+
+        if (String.IsNullOrEmpty(pastaParaGerarJson))
+        {
+          Console.WriteLine("O Caminho da pasta raiz do Json deve ser informado para receber o arquivo!");
+
+        }
+
+        if (!String.IsNullOrEmpty(pastaParaProcessar) && !String.IsNullOrEmpty(pastaParaGerarJson))
         {
 
           var stopWatch = new Stopwatch();
-          string[] arquivosParaProcessar = Directory.GetFiles(pastarParaProcessar);
+          string[] arquivosParaProcessar = Directory.GetFiles(pastaParaProcessar);
 
           stopWatch.Start();
           List<DadosDepatamentoDto> listaDadosDasPlanilhas = new List<DadosDepatamentoDto>();
@@ -49,7 +58,7 @@ namespace Processador.Services
           });
           stopWatch.Stop();
 
-          await GerarJson(listaDadosDasPlanilhas);
+          await GerarJson(listaDadosDasPlanilhas, pastaParaGerarJson);
 
         }
 
@@ -142,7 +151,7 @@ namespace Processador.Services
       return await Task.FromResult(novoFuncionario);
     }
 
-    private static async Task GerarJson(List<DadosDepatamentoDto> listaDadosDasPlanilhas)
+    private static async Task GerarJson(List<DadosDepatamentoDto> listaDadosDasPlanilhas, string pastaGerarJson)
     {
       //Task<bool> secondHandlerFinished = s_tcs.Task;
       List<RelatorioDepartamento> listaDepartamentos = new List<RelatorioDepartamento>();
@@ -201,7 +210,7 @@ namespace Processador.Services
 
       }
 
-      JsonFileUtils.SimpleWrite(listaDepartamentosFinal, "C:\\Auvo\\ArquivosGerados\\RelatorioFinal.json");
+      JsonFileUtils.SimpleWrite(listaDepartamentosFinal, pastaGerarJson + "RelatorioFinal.json");
       Console.WriteLine(" Arquivo Json Gerado Com Sucesso!");
       Console.WriteLine("Aperte ENTER para fechar console......");
       String? line = Console.ReadLine();
