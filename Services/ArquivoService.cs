@@ -210,7 +210,7 @@ namespace Processador.Services
 
       }
 
-      JsonFileUtils.SimpleWrite(listaDepartamentosFinal, pastaGerarJson + "RelatorioFinal.json");
+      JsonFileUtils.SimpleWrite(listaDepartamentosFinal, pastaGerarJson + "\\RelatorioFinal.json");
       Console.WriteLine(" Arquivo Json Gerado Com Sucesso!");
       Console.WriteLine("Aperte ENTER para fechar console......");
       String? line = Console.ReadLine();
