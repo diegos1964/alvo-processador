@@ -50,10 +50,11 @@ namespace Processador.Services
           stopWatch.Stop();
 
           await GerarJson(listaDadosDasPlanilhas);
-          Console.WriteLine(" Arquivo Json Gerado Com Sucesso!");
+
         }
+
       }
-      catch (System.Exception ex)
+      catch (System.Exception)
       {
         Console.WriteLine("Ocorreu uma falha no processar os arquivos!");
       }
@@ -143,7 +144,7 @@ namespace Processador.Services
 
     private static async Task GerarJson(List<DadosDepatamentoDto> listaDadosDasPlanilhas)
     {
-      Task<bool> secondHandlerFinished = s_tcs.Task;
+      //Task<bool> secondHandlerFinished = s_tcs.Task;
       List<RelatorioDepartamento> listaDepartamentos = new List<RelatorioDepartamento>();
       List<RelatorioDepartamento> listaDepartamentosFinal = new List<RelatorioDepartamento>();
 
@@ -201,9 +202,14 @@ namespace Processador.Services
       }
 
       JsonFileUtils.SimpleWrite(listaDepartamentosFinal, "C:\\Auvo\\ArquivosGerados\\RelatorioFinal.json");
-      await secondHandlerFinished;
+      Console.WriteLine(" Arquivo Json Gerado Com Sucesso!");
+      Console.WriteLine("Aperte ENTER para fechar console......");
+      String? line = Console.ReadLine();
 
-
+      if (line == "enter")
+      {
+        System.Environment.Exit(0);
+      }
 
     }
 
