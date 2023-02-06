@@ -19,17 +19,11 @@ Além disto é bom ter um editor para trabalhar com o código como [VSCode](http
 # Clone este repositório
 $ git clone <https://github.com/diegos1964/auvo-processador.git>
 
-# Acesse a pasta do projeto no terminal/cmd
-$ cd 
+# Acesse a pasta do projeto raiz do projeto e digite o comando
+$ dotnet run
 
-# Vá para a pasta server
-$ cd server
+# Vai abrir o console e você deverá informar o caminho da pasta com os arquivos csv a serem processados.
+![image](https://user-images.githubusercontent.com/39017463/216878471-c41cb15b-fa9c-4e80-bc68-2732832a4297.png)
 
-# Instale as dependências
-$ npm install
 
-# Execute a aplicação em modo de desenvolvimento
-$ npm run dev:server
-
-# O servidor inciará na porta:3333 - acesse <http://localhost:3333>
 
