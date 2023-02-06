@@ -18,47 +18,44 @@ namespace Processador.Services
     static readonly TaskCompletionSource<bool> s_tcs = new TaskCompletionSource<bool>();
     public static async Task ProcessarArquivo()
     {
-      Console.WriteLine("Olá, Seja bem-vindo!");
-
-      Console.WriteLine("Digite a pasta raiz dos arquivos: ");
-      string? pastarParaProcessar = Console.ReadLine();
-
-      if (String.IsNullOrEmpty(pastarParaProcessar))
+      try
       {
-        Console.WriteLine("O Caminho da pasta raiz deve ser informado para processar");
+        Console.WriteLine("Olá, Seja bem-vindo!");
 
-      }
+        Console.WriteLine("Digite a pasta raiz dos arquivos: ");
+        string? pastarParaProcessar = Console.ReadLine();
 
-      if (!String.IsNullOrEmpty(pastarParaProcessar))
-      {
-
-        var stopWatch = new Stopwatch();
-        string[] arquivosParaProcessar = Directory.GetFiles(pastarParaProcessar);
-
-        stopWatch.Start();
-        List<DadosDepatamentoDto> listaDadosDasPlanilhas = new List<DadosDepatamentoDto>();
-        await Parallel.ForEachAsync(arquivosParaProcessar, async (arquivo, cancellationToken) =>
+        if (String.IsNullOrEmpty(pastarParaProcessar))
         {
-          var ultimaBarra = arquivo.LastIndexOf("\\") + 1;
-          var nomeArquivo = arquivo.Substring(ultimaBarra);
+          Console.WriteLine("O Caminho da pasta raiz deve ser informado para processar");
 
+        }
 
-          // Console.WriteLine(nomeArquivo);
+        if (!String.IsNullOrEmpty(pastarParaProcessar))
+        {
 
-          var nomeSemExtensao = nomeArquivo.Split(".")[0];
+          var stopWatch = new Stopwatch();
+          string[] arquivosParaProcessar = Directory.GetFiles(pastarParaProcessar);
 
-          //Console.WriteLine(nomeSemExtensao);
+          stopWatch.Start();
+          List<DadosDepatamentoDto> listaDadosDasPlanilhas = new List<DadosDepatamentoDto>();
+          await Parallel.ForEachAsync(arquivosParaProcessar, async (arquivo, cancellationToken) =>
+          {
+            var ultimaBarra = arquivo.LastIndexOf("\\") + 1;
+            var nomeArquivo = arquivo.Substring(ultimaBarra);
+            var nomeSemExtensao = nomeArquivo.Split(".")[0];
+            var arrayDadosDoArquivo = nomeSemExtensao.Split("-");
+            await LerArquivo(arquivo, arrayDadosDoArquivo, listaDadosDasPlanilhas);
+          });
+          stopWatch.Stop();
 
-          var arrayDadosDoArquivo = nomeSemExtensao.Split("-");
-          await LerArquivo(arquivo, arrayDadosDoArquivo, listaDadosDasPlanilhas);
-
-
-
-        });
-        stopWatch.Stop();
-        // Manipular os Dados
-
-        await GerarJson(listaDadosDasPlanilhas);
+          await GerarJson(listaDadosDasPlanilhas);
+          Console.WriteLine(" Arquivo Json Gerado Com Sucesso!");
+        }
+      }
+      catch (System.Exception ex)
+      {
+        Console.WriteLine("Ocorreu uma falha no processar os arquivos!");
       }
     }
 
@@ -78,7 +75,6 @@ namespace Processador.Services
         NomeDepartamento = arrayDadosDoArquivo[0],
       };
 
-      Console.WriteLine($" Nome Departamento: {dadosArquivoDto.NomeDepartamento}");
       var config = new CsvConfiguration(CultureInfo.InvariantCulture)
       {
         HasHeaderRecord = true,
@@ -97,7 +93,6 @@ namespace Processador.Services
         while (await csv.ReadAsync())
         {
           var funcionario = csv.GetRecord<DadosHorasFuncionarioLeituraDto>();
-          // Console.WriteLine($"Codigo: {funcionario.Codigo} , Nome: {funcionario.Nome} , Valor: {double.Parse(funcionario.ValorHora.Replace("R$", "").Replace(" ", "")).ToString()} ");
 
           if (funcionario != null)
           {
